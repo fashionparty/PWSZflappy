@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".HighscoresActivity">
+
+    <Button
+        android:id="@+id/highscoreactivity_1_b"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_shape"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:text="1."
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/highscoreactivity_2_b"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_shape"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/highscoreactivity_1_b"
+        android:layout_marginTop="50dp"
+        android:text="2."
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/highscoreactivity_3_b"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_shape"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/highscoreactivity_2_b"
+        android:layout_marginTop="50dp"
+        android:text="3."
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/highscoreactivity_4_b"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_shape"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/highscoreactivity_3_b"
+        android:layout_marginTop="50dp"
+        android:text="4."
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/highscoreactivity_5_b"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/button_shape"
+        android:textAlignment="textStart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/highscoreactivity_4_b"
+        android:layout_marginTop="50dp"
+        android:text="5."
+        android:textSize="15sp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
