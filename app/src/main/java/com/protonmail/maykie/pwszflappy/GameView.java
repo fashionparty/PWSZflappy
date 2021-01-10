@@ -15,19 +15,12 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameView extends View {
@@ -73,29 +66,9 @@ public class GameView extends View {
         gravity = 1;
         tubeVelocity = 5;
 
-        realtimeDatabase.readData(new OnGetDataListener() {
-            @Override
-            public void onSuccess(ArrayList<User> list) {
-                userList = list;
-            }
+        realtimeDatabase.readData(list -> userList = list);
 
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
-
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                invalidate();
-            }
-        };
+        runnable = () -> invalidate();
 
         handler = new Handler();
         gameConfig = GameConfig.getInstanceOf();
@@ -158,23 +131,19 @@ public class GameView extends View {
         paint.setColor(Color.BLACK);
         paint.setTextSize(200);
 
-        //game running
         if (gameRunning) {
 
             canvas.drawText(Integer.toString(score), displayWidth / 2, 250, paint);
 
-            //switching bird frames
             if (frameCounter < 5) birdFrame = bird1;
             else birdFrame = bird2;
             if (frameCounter == 10) frameCounter = 0;
 
             frameCounter++;
 
-            //physics
             velocity += gravity;
             birdLocation.y += velocity;
 
-            //tubes
             for (int i = 0; i < 2; i++) {
                 canvas.drawBitmap(botTube, tubes[i].getBotTubePeakLocation().x, tubes[i].getBotTubePeakLocation().y, null);
                 canvas.drawBitmap(topTube, tubes[i].getBotTubePeakLocation().x, tubes[i].getBotTubePeakLocation().y - topTube.getHeight() - 800, null);
@@ -215,12 +184,6 @@ public class GameView extends View {
         }
 
         if (!gameLost) handler.postDelayed(runnable, 10);
-
-            /*  //SHOW HITBOX
-            Paint paint1 = new Paint();
-            paint.setColor(Color.RED);
-            Rect rect1 = new Rect(birdLocation.x-75+birdFrame.getWidth()/2 , birdLocation.y-175+birdFrame.getHeight()/2, birdLocation.x+75+birdFrame.getWidth()/2, birdLocation.y+175+birdFrame.getHeight()/2);
-            canvas.drawRect(rect1, paint1);*/
     }
 
     private boolean detectCollision() {
@@ -233,12 +196,12 @@ public class GameView extends View {
             collision = true;
         }
 
-        for (int i = 0; i < tubes.length; i++) {
-            if ((birdCenter.x - 75 > tubes[i].getBotTubePeakLocation().x && birdCenter.x - 75 < tubes[i].getBotTubePeakLocation().x + topTube.getWidth())
-                    || (birdCenter.x + 75 > tubes[i].getBotTubePeakLocation().x && birdCenter.x + 75 < tubes[i].getBotTubePeakLocation().x + topTube.getWidth())) {
-                if (birdCenter.y - 175 < tubes[i].getBotTubePeakLocation().y - 800 || birdCenter.y - 175 > tubes[i].getBotTubePeakLocation().y) {
+        for (Tube tube : tubes) {
+            if ((birdCenter.x - 75 > tube.getBotTubePeakLocation().x && birdCenter.x - 75 < tube.getBotTubePeakLocation().x + topTube.getWidth())
+                    || (birdCenter.x + 75 > tube.getBotTubePeakLocation().x && birdCenter.x + 75 < tube.getBotTubePeakLocation().x + topTube.getWidth())) {
+                if (birdCenter.y - 175 < tube.getBotTubePeakLocation().y - 800 || birdCenter.y - 175 > tube.getBotTubePeakLocation().y) {
                     collision = true;
-                } else if (birdCenter.y + 175 < tubes[i].getBotTubePeakLocation().y - 800 || birdCenter.y + 175 > tubes[i].getBotTubePeakLocation().y) {
+                } else if (birdCenter.y + 175 < tube.getBotTubePeakLocation().y - 800 || birdCenter.y + 175 > tube.getBotTubePeakLocation().y) {
                     collision = true;
                 }
             }
@@ -251,6 +214,7 @@ public class GameView extends View {
         gameRunning = false;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -258,10 +222,10 @@ public class GameView extends View {
 
         if (action == MotionEvent.ACTION_DOWN) {
 
-            if(gameLost==false) {
+            if(!gameLost) {
                 velocity = -20;
                 gameRunning = true;
-            } else if(gameLost==true && gameRunning==false) {
+            } else if(!gameRunning) {
                 startRestart();
                 this.invalidate();
             }
@@ -271,7 +235,7 @@ public class GameView extends View {
 
     private boolean compareScore() {
         for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getEmail().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+            if (userList.get(i).getEmail().equals(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail())) {
                 user = userList.get(i);
             }
         }
@@ -282,6 +246,6 @@ public class GameView extends View {
     }
 
     public void updateScore() {
-        dbRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("highscore").setValue(score);
+        dbRef.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).child("highscore").setValue(score);
     }
 }

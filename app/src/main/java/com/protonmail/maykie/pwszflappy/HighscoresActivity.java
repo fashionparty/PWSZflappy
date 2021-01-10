@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
 import com.google.firebase.database.ChildEventListener;
@@ -13,12 +13,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class HighscoresActivity extends AppCompatActivity {
 
@@ -26,14 +24,16 @@ public class HighscoresActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference dbReference;
     private ArrayList<User> lista;
-    private int count = 1;
-    private int numberOfUsers = 0;
+    private int count;
+    private int numberOfUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highscores);
 
+        count = 1;
+        numberOfUsers = 0;
         database = FirebaseDatabase.getInstance();
         dbReference = database.getReference("users");
 
@@ -81,9 +81,7 @@ public class HighscoresActivity extends AppCompatActivity {
             }
         });
 
-
         buttons = new Button[5];
-
         buttons[0] = findViewById(R.id.highscoreactivity_1_b);
         buttons[1] = findViewById(R.id.highscoreactivity_2_b);
         buttons[2] = findViewById(R.id.highscoreactivity_3_b);
@@ -91,6 +89,7 @@ public class HighscoresActivity extends AppCompatActivity {
         buttons[4] = findViewById(R.id.highscoreactivity_5_b);
     }
 
+    @SuppressLint("SetTextI18n")
     private void readData(ArrayList<User> userList) {
 
         Collections.sort(userList);

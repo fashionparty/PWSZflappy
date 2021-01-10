@@ -1,8 +1,8 @@
 package com.protonmail.maykie.pwszflappy;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -12,12 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tvNewAccount.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
@@ -60,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    void userLogin() {
+    private void userLogin() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
@@ -88,14 +84,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return;
         }
 
-        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                } else {
-                    Toast.makeText(LoginActivity.this, "Nie udało się zalogować", Toast.LENGTH_SHORT).show();
-                }
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(this, task -> {
+            if(task.isSuccessful()) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            } else {
+                Toast.makeText(LoginActivity.this, "Nie udało się zalogować", Toast.LENGTH_SHORT).show();
             }
         });
     }

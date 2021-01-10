@@ -4,14 +4,10 @@ import android.graphics.Point;
 
 public class Tube {
 
-    private Point botTubePeakLocation;
+    private final Point botTubePeakLocation;
 
     public Point getBotTubePeakLocation() {
         return botTubePeakLocation;
-    }
-
-    public void setBotTubePeakLocation(Point botTubePeakLocation) {
-        this.botTubePeakLocation = botTubePeakLocation;
     }
 
     public Tube(Point botTubePeakLocation) {
