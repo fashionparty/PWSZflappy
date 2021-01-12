@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bCharacter = findViewById(R.id.mainactivity_character_button);
         bHighscore = findViewById(R.id.mainactivity_highscore_button);
         bExit = findViewById(R.id.mainactivity_exit_button);
-
         bStart.setOnClickListener(MainActivity.this);
         bCharacter.setOnClickListener(MainActivity.this);
         bHighscore.setOnClickListener(MainActivity.this);
